@@ -5,15 +5,15 @@ const { Pool } = pkg;
 import "dotenv/config";
 
 const pool = new Pool({
-  host: process.env.HOST,
-  user: process.env.USER,
-  database: process.env.DATABASE,
-  port: process.env.PORT,
-  password: process.env.PASSWORD,
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_DATABASE,
+  port: process.env.DB_PORT,
+  password: process.env.DB_PASSWORD,
   max: 20,
   idleTimeoutMillis: 30000,
   connectionTimeoutMillis: 2000,
-  ssl: process.env.SSL,
+  ssl: process.env.DB_SSL,
 });
 
 export async function checkConnection() {
