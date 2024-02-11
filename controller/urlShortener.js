@@ -16,7 +16,7 @@ async function createShortUrl(req, res) {
     return res
       .status(200)
       .json(
-        `https://api-url-shortener.onrender.com${response.rows[0].short_url}`
+        `https://api-url-shortener.onrender.com/${response.rows[0].short_url}`
       );
   } catch (error) {
     return res.status(500).json(error);
