@@ -21,6 +21,19 @@ async function updateDetails(req, res) {
     const email = req.body.email;
     const authData = req.user;
 
+    // validate if username or email are empty
+    if (!username || !email) {
+      return res.status(400).json({ message: "username or email is empty" });
+    }
+
+    // validate if id is exist in database or not
+    const querycheckId = `SELECT * FROM "Users" WHERE id=$1`;
+    const checkId = await pool.query(querycheckId, [userid]);
+
+    if (checkId.rowCount === 0) {
+      return res.status(400).json({ message: `id ${userid} is not exist` });
+    }
+
     // check if email already exist
     const queryCheckEmail = `SELECT * FROM "Users" WHERE email = $1`;
     const checkEmail = await pool.query(queryCheckEmail, [reqBody.email]);
@@ -37,19 +50,6 @@ async function updateDetails(req, res) {
 
     if (checkUsername.rows.length > 0) {
       return res.status(400).json({ message: "Username already exist" });
-    }
-
-    // validate if username or email are empty
-    if (!username || !email) {
-      return res.status(400).json({ message: "username or email is empty" });
-    }
-
-    // validate if id is exist in database or not
-    const querycheckId = `SELECT * FROM "Users" WHERE id=$1`;
-    const checkId = await pool.query(querycheckId, [userid]);
-
-    if (checkId.rowCount === 0) {
-      return res.status(400).json({ message: `id ${userid} is not exist` });
     }
 
     // validate if the user details is belong to the user
