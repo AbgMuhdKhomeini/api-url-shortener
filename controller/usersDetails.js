@@ -26,6 +26,24 @@ async function updateDetails(req, res) {
       return res.status(400).json({ message: "username or email is empty" });
     }
 
+    // check if email already exist
+    const queryCheckEmail = `SELECT * FROM "Users" WHERE email = $1`;
+    const checkEmail = await pool.query(queryCheckEmail, [reqBody.email]);
+
+    if (checkEmail.rows.length > 0) {
+      return res.status(400).json({ message: "Email already exist" });
+    }
+
+    // check if username already exist
+    const queryCheckUsername = `SELECT * FROM "Users" WHERE username = $1`;
+    const checkUsername = await pool.query(queryCheckUsername, [
+      reqBody.username,
+    ]);
+
+    if (checkUsername.rows.length > 0) {
+      return res.status(400).json({ message: "Username already exist" });
+    }
+
     // validate if id is exist in database or not
     const querycheckId = `SELECT * FROM "Users" WHERE id=$1`;
     const checkId = await pool.query(querycheckId, [userid]);
